@@ -315,9 +315,9 @@ La forma exacta en la que el robot viaja desde su posición actual $\mathbf{x}$ 
 
 RESULTADOS DE SIMULACIÓN:
 
-![alt text](EXP1.gif)
-![alt text](EXP1X.png)
-![alt text](EXP1Y.png)
+![alt text](EXP2.gif)
+![alt text](EXP2X.png)
+![alt text](EXP2Y.png)
 
 ---
 
@@ -326,5 +326,4 @@ RESULTADOS DE SIMULACIÓN:
 ### 3. Conclusión del Experimento
 
 El experimento demuestra que el control de impedancia no solo sirve para regular la interacción física con fuerzas externas (Experimento 1), sino que también actúa como un generador de trayectorias implícito. El robot actúa como si estuviera atado por gomas elásticas al punto   $\mathbf{x}_d$  ; al mover dicho punto, arrastramos al robot con una dinámica que nosotros mismos hemos esculpido mediante las matrices  $\mathbf{M}$  ,  $\mathbf{B}$ y $\mathbf{K}$  .
-
 
