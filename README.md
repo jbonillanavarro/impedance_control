@@ -255,12 +255,21 @@ Con valores de alta impedancia en X y baja en Y:
 
 Para eliminar este acoplamiento indeseado y conseguir que el manipulador se comporte exactamente como dicta nuestro modelo de impedancia ideal, es necesario compensar la fuerza externa a nivel de par articular (en el nodo `dynamics_cancellation`).
 
-Si disponemos de la medida de la fuerza externa $\mathbf{f}_{ext}$, podemos introducir un término de prealimentación (*feedforward*) en la ley de control por par calculado para contrarrestar el efecto de dicha fuerza sobre la estructura mecánica:
+Si disponemos de la medida de la fuerza externa     $\mathbf{f}_{ext}$      , podemos introducir un término de prealimentación (*feedforward*) en la ley de control por par calculado para contrarrestar el efecto de dicha fuerza sobre la estructura mecánica:
 
 $$\boldsymbol{\tau} = \mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}}_d + \mathbf{n}(\mathbf{q}, \dot{\mathbf{q}}) - \mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$$
 
-Al aplicar esta nueva ley de control, el término 
-$-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ del controlador anula exactamente la perturbación física $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ sufrida por el robot. Como resultado directo, $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$, garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
+Al aplicar esta nueva ley de control, el término:     
+
+$-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$
+
+del controlador anula exactamente la perturbación física:
+
+
+$+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$         
+
+sufrida por el robot.
+Como resultado directo,         $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$        , garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
 
 
 
