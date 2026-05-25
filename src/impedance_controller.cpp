@@ -54,7 +54,7 @@
               joint_torques_(Eigen::VectorXd::Zero(2)),
               external_wrenches_(Eigen::VectorXd::Zero(2)),
               jacobian_(Eigen::MatrixXd::Zero(2, 2)),
-              jacobian_derivative_(Eigen::MatrixXd::Zero(2, 2)),
+              jacobianderivative_(Eigen::MatrixXd::Zero(2, 2)),
               equilibrium_pose_(Eigen::VectorXd::Zero(2)),
               previous_time_(high_resolution_clock::now())
         {
@@ -64,8 +64,8 @@
             // Dynamics parameters initialization
             this->declare_parameter<double>("m1", 1.0);
             this->declare_parameter<double>("m2", 1.0);
-            this->declare_parameter<double>("l1", 1.0);
-            this->declare_parameter<double>("l2", 1.0);
+            this->declare_parameter<double>("l1_", 1.0);
+            this->declare_parameter<double>("l2_", 1.0);
 
             // Impedance parameters initialization
             this->declare_parameter<std::vector<double>>("M", {0, 0, 0, 0});
@@ -81,8 +81,8 @@
             // Get dynamic parameters
             m1_ = this->get_parameter("m1").as_double();
             m2_ = this->get_parameter("m2").as_double();
-            l1_ = this->get_parameter("l1").as_double();
-            l2_ = this->get_parameter("l2").as_double();
+            l1_ = this->get_parameter("l1_").as_double();
+            l2_ = this->get_parameter("l2_").as_double();
 
             // Get impedance parameters
             auto check_matrix_size = [](const std::vector<double> &vec, const std::string &name)
@@ -220,15 +220,15 @@
         // Method to calculate forward kinematics
         Eigen::VectorXd forward_kinematics()
         {
-            // Placeholder for forward kinematics x = [l1 * cos(q1) + l2 * cos(q1 + q2), l1 * sin(q1) + l2 * sin(q1 + q2)]
+            // Placeholder for forward kinematics x = [l1_ * cos(q1) + l2_ * cos(q1 + q2), l1_ * sin(q1) + l2_ * sin(q1 + q2)]
             Eigen::VectorXd x(2);
             // Extraemos las posiciones articulares para que el código sea más limpio
-            double q1 = jointpositions(0);
-            double q2 = jointpositions(1);
+            double q1 = joint_positions_(0);
+            double q2 = joint_positions_(1);
 
             // Aplicamos las ecuaciones de la cinemática directa
-            x(0) = l1 * cos(q1) + l2 * cos(q1 + q2);
-            x(1) = l1 * sin(q1) + l2 * sin(q1 + q2);
+            x(0) = l1_ * cos(q1) + l2_ * cos(q1 + q2);
+            x(1) = l1_ * sin(q1) + l2_ * sin(q1 + q2);
 
             return x;
         }
@@ -237,10 +237,10 @@
         void update_jacobians()
         {
             // Extraemos posiciones y velocidades articulares
-            double q1 = jointpositions(0);
-            double q2 = jointpositions(1);
-            double dq1 = jointvelocities(0);
-            double dq2 = jointvelocities(1);
+            double q1 = joint_positions_(0);
+            double q2 = joint_positions_(1);
+            double dq1 = joint_velocities_(0);
+            double dq2 = joint_velocities_(1);
 
             // Pre-calculamos senos y cosenos para eficiencia
             double s1 = sin(q1);
@@ -249,18 +249,18 @@
             double c12 = cos(q1 + q2);
 
             // Calculate J(q)
-            jacobian << -l1 * s1 - l2 * s12, -l2 * s12,
-                          l1 * c1 + l2 * c12,  l2_ * c12;
+            jacobian_ << -l1_ * s1 - l2_ * s12, -l2_ * s12,
+                          l1_ * c1 + l2_ * c12,  l2_ * c12;
 
             // Calculate J'(q,q') (Corregido con la regla de la cadena)
-            jacobianderivative << -l1 * c1 * dq1 - l2 * c12 * (dq1 + dq2), -l2 * c12 * (dq1 + dq2),
-                                    -l1 * s1 * dq1 - l2 * s12 * (dq1 + dq2), -l2 * s12 * (dq1 + dq2);
+            jacobianderivative_ << -l1_ * c1 * dq1 - l2_ * c12 * (dq1 + dq2), -l2_ * c12 * (dq1 + dq2),
+                                    -l1_ * s1 * dq1 - l2_ * s12 * (dq1 + dq2), -l2_ * s12 * (dq1 + dq2);
 
-            RCLCPP_INFO(this->getlogger(), "Jacobian:\n[%.3f, %.3f]\n[%.3f, %.3f]",
-                        jacobian(0, 0), jacobian(0, 1),
-                        jacobian(1, 0), jacobian(1, 1));
+            RCLCPP_INFO(this->get_logger(), "Jacobian:\n[%.3f, %.3f]\n[%.3f, %.3f]",
+                        jacobian_(0, 0), jacobian_(0, 1),
+                        jacobian_(1, 0), jacobian_(1, 1));
 
-            double det = jacobian.determinant();
+            double det = jacobian_.determinant();
             RCLCPP_INFO(this->get_logger(), "Jacobian determinant: %.6f", det);
         }
 
@@ -296,7 +296,7 @@
             desired_cartesian_accelerations_(0), desired_cartesian_accelerations_(1));
 
             // q'' = J(q)^(-1)[x'' - J'(q,q')q']
-            Eigen::VectorXd q_ddot = jacobian_.inverse() * (desired_cartesian_accelerations_ - jacobian_derivative_ * joint_velocities_);
+            Eigen::VectorXd q_ddot = jacobian_.inverse() * (desired_cartesian_accelerations_ - jacobianderivative_ * joint_velocities_);
 
             return q_ddot;
             }
@@ -334,7 +334,7 @@
 
         // Jacobian matrices
         Eigen::MatrixXd jacobian_;
-        Eigen::MatrixXd jacobian_derivative_;
+        Eigen::MatrixXd jacobianderivative_;
 
         // Impedance matrices
         Eigen::MatrixXd mass_matrix_;
