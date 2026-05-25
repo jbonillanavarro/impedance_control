@@ -259,7 +259,7 @@ Si disponemos de la medida de la fuerza externa     $\mathbf{f}_{ext}$    , pode
 
 $$\boldsymbol{\tau} = \mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}}_d + \mathbf{n}(\mathbf{q}, \dot{\mathbf{q}}) - \mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$$
 
-Al aplicar esta nueva ley de control, el término     $-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$     del controlador anula exactamente la perturbación física     $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$     sufrida por el robot. Como resultado directo,     $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$    , garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
+Al aplicar esta nueva ley de control, el término       $-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$       del controlador anula exactamente la perturbación física       $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$       sufrida por el robot. Como resultado directo,       $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$      , garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
 
 
 
