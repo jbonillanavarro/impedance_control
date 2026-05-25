@@ -120,13 +120,17 @@ Consiste en una multiplicación matricial directa utilizando las variables previ
 
 **Formulación Matemática:**
 Se definen los errores de posición y velocidad respecto al punto de equilibrio:
+
 $$ \tilde{\mathbf{x}} = \mathbf{x} - \mathbf{x}_d $$
+
 $$ \dot{\tilde{\mathbf{x}}} = \dot{\mathbf{x}} - \dot{\mathbf{x}}_d $$
 
 La ecuación de la impedancia de segundo orden establece la relación de fuerzas:
+
 $$ \mathbf{M}\ddot{\mathbf{x}}_d + \mathbf{B}\dot{\tilde{\mathbf{x}}} + \mathbf{K}\tilde{\mathbf{x}} = \mathbf{f}_{ext} $$
 
 Despejando la aceleración deseada $\ddot{\mathbf{x}}_d$:
+
 $$ \ddot{\mathbf{x}}_d = \mathbf{M}^{-1}(\mathbf{f}_{ext} - \mathbf{B}\dot{\tilde{\mathbf{x}}} - \mathbf{K}\tilde{\mathbf{x}}) $$
 
 **Implementación en C++:**
@@ -154,9 +158,11 @@ Se asume una velocidad de equilibrio nula ($\dot{\mathbf{x}}_d = \mathbf{0}$). S
 
 **Formulación Matemática:**
 La cinemática diferencial de segundo orden se define como:
+
 $$ \ddot{\mathbf{x}} = \mathbf{J}(\mathbf{q})\ddot{\mathbf{q}} + \dot{\mathbf{J}}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} $$
 
 Despejando el vector de aceleraciones articulares, $\ddot{\mathbf{q}}$:
+
 $$ \ddot{\mathbf{q}} = \mathbf{J}(\mathbf{q})^{-1}[\ddot{\mathbf{x}} - \dot{\mathbf{J}}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}}] $$
 
 **Implementación en C++:**
