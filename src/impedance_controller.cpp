@@ -129,8 +129,6 @@
             // Set the timer callback at a period (in milliseconds, multiply it by 1000)
             timer_ = this->create_wall_timer(
                 std::chrono::milliseconds(static_cast<int>(1000 / frequency)), std::bind(&ImpedanceControllerNode::timer_callback, this));
-            
-            publisher_jacobian_ = this->create_publisher<std_msgs::msg::Float64MultiArray>("jacobian", 1);
         }
 
         // Timer callback - when there is a timer callback, computes the new joint acceleration, velocity and position and publishes them
@@ -149,9 +147,6 @@
 
             cartesian_pose_ = forward_kinematics();                                 // Calculate cartesian pose
             update_jacobians();                                                     // Update jacobian and jacobian derivative
-            auto jac_msg = std_msgs::msg::Float64MultiArray();
-            jac_msg.data = {jacobian_(0,0), jacobian_(0,1), jacobian_(1,0), jacobian_(1,1)};
-            publisher_jacobian_->publish(jac_msg);
             cartesian_velocities_ = differential_kinematics();                      // Calculate Cartesian velocity with first-order differental kinematics
             desired_cartesian_accelerations_ = impedance_controller();              // Calculate desired cartesian accelerations with impedance controller
             desired_joint_accelerations_ = calculate_desired_joint_accelerations(); // Calculate the desired_joint_accelerations
@@ -323,7 +318,6 @@
 
         // Member variables
         // Publishers and subscribers
-        rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_jacobian_;
         rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscription_joint_states_;
         rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription_equilibrium_pose_;
         rclcpp::Subscription<geometry_msgs::msg::Wrench>::SharedPtr external_wrenches_subscription_;

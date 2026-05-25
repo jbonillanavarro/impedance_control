@@ -14,8 +14,6 @@ Output: joint_torques
 #include <chrono>
 #include <Eigen/Dense>
 #include <cmath>
-#include <geometry_msgs/msg/wrench.hpp>
-#include <std_msgs/msg/float64_multi_array.hpp>
 class DynamicsCancellationNode : public rclcpp::Node
 {
 public:
@@ -60,15 +58,6 @@ public:
         // Set the timer callback at a period (in milliseconds, multiply it by 1000)
         timer_ = this->create_wall_timer(
             std::chrono::milliseconds(static_cast<int>(1000 / frequency)), std::bind(&DynamicsCancellationNode::timer_callback, this));
-        // Create subscription to external_wrenches (Llamando a tu propia clase)
-        external_wrenches_subscription_ = this->create_subscription<geometry_msgs::msg::Wrench>(
-            "external_wrenches", 1, std::bind(&DynamicsCancellationNode::external_wrenches_callback, this, std::placeholders::_1));
-
-        // Create subscription to jacobian
-        subscription_jacobian_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-            "jacobian", 1, [this](const std_msgs::msg::Float64MultiArray::SharedPtr msg) {
-                jacobian_ << msg->data[0], msg->data[1], msg->data[2], msg->data[3];
-            });
     }
     // Timer callback - when there is a timer callback, computes the new joint acceleration, velocity and position and publishes them
     void timer_callback()
@@ -99,16 +88,6 @@ private:
     {
         desired_joint_accelerations_ = Eigen::VectorXd::Map(msg->data.data(), msg->data.size());
     }
-
-    void external_wrenches_callback(const geometry_msgs::msg::Wrench::SharedPtr msg)
-    {
-        auto forces = msg->force;
-        // This change of coordinates is based on how the dynamic model is define in the 2D plane and the EE frame is defined in the 3D plane
-        external_wrenches_(0) = forces.x;
-        external_wrenches_(1) = forces.y;
-        external_wrench_received_ = true;
-    }
-
     // Method to calculate joint acceleration
     // Method to calculate joint acceleration
     Eigen::VectorXd cancel_dynamics()
@@ -143,10 +122,8 @@ private:
         g_vec(0) = (m1_ + m2_) * g_ * l1_ * std::cos(q1) + m2_ * g_ * l2_ * std::cos(q1 + q2);
         g_vec(1) = m2_ * g_ * l2_ * std::cos(q1 + q2);
         // Calculate control torque using the dynamic model: torque = M * q_ddot_d + C * q_dot + Fb * q_dot + g
-        Eigen::VectorXd tau_ext = jacobian_.transpose() * external_wrenches_;
-    
         Eigen::VectorXd torque(2);
-        torque = M * q_ddot_d + C_vec + Fb_vec + g_vec - tau_ext;
+        torque = M * q_ddot_d + C_vec + Fb_vec + g_vec;
         return torque;
     }
     // Method to publish the joint data
@@ -162,14 +139,6 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscription_joint_states_;
     rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr subscription_desired_joint_accelerations_;
     rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_joint_torques_;
-    rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr subscription_jacobian_;
-    rclcpp::Subscription<geometry_msgs::msg::Wrench>::SharedPtr external_wrenches_subscription_;
-    
-    // Variables de datos (Asegúrate de tener estas dos líneas)
-    Eigen::VectorXd external_wrenches_ = Eigen::VectorXd::Zero(2);
-    Eigen::MatrixXd jacobian_ = Eigen::MatrixXd::Zero(2, 2); // DECLARACIÓN NECESARIA
-    
-    bool external_wrench_received_ = false;
     rclcpp::TimerBase::SharedPtr timer_;
     // Joint variables
     Eigen::VectorXd joint_positions_;
