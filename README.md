@@ -203,9 +203,6 @@ Modificar los parámetros en el archivo `impedance_params.yaml` altera directame
 * **Matriz de Amortiguamiento ($\mathbf{B}$):** Modula la disipación de energía, actuando como una fricción viscosa. Un valor alto frena el movimiento y evita oscilaciones (respuesta sobreamortiguada). Un valor bajo permite que el robot reaccione más rápido, pero con un alto riesgo de oscilar alrededor de la pose de equilibrio (respuesta subamortiguada).
 * **Matriz de Rigidez ($\mathbf{K}$):** Actúa como la constante elástica de un muelle virtual que tira del robot hacia $\mathbf{x}_d$. Un valor alto implica que se requiere una gran fuerza para desplazar al robot de su punto de equilibrio, haciéndolo muy rígido. Un valor bajo hace que el robot sea dócil o compliante.
 
-*[Espacio para captura de simulación: Gráficas mostrando la respuesta temporal (posición frente a fuerza) variando M, B o K]*
-
----
 
 ### 2. Efecto de "alta impedancia" en el eje X y "baja impedancia" en el eje Y
 
@@ -216,9 +213,6 @@ $$\mathbf{K} = \begin{bmatrix} K_{alto} & 0 \\ 0 & K_{bajo} \end{bmatrix}$$
 * **Eje X (Alta impedancia):** El robot se resistirá fuertemente a cualquier desplazamiento en la dirección X. Se comportará como una superficie dura.
 * **Eje Y (Baja impedancia):** El robot cederá fácilmente ante cualquier fuerza aplicada en la dirección Y. Se comportará de forma dócil y se dejará arrastrar con facilidad.
 
-*[Espacio para captura de simulación: Gráficas RViz o de posición donde se observe un desplazamiento mínimo en X y un desplazamiento amplio en Y ante magnitudes de fuerza similares]*
-
----
 
 ### 3. Acoplamiento de ejes ante la aplicación de fuerzas
 
@@ -239,11 +233,28 @@ $$\mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}} = \mathbf{M}_{rob}(\mathbf{q})\d
 
 $$\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d + \mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$$
 
-Proyectando esta relación al espacio operacional, la matriz de inercia cartesiana aparente del manipulador es $\mathbf{\Lambda}(\mathbf{q}) = (\mathbf{J}(\mathbf{q})\mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T)^{-1}$. Debido a la cinemática del robot, esta matriz $\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**. Por tanto, una perturbación $\mathbf{f}_{ext}$ puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
+Proyectando esta relación al espacio operacional, la matriz de inercia cartesiana aparente del manipulador es:
 
-*[Espacio para captura de simulación: Gráficas de las series temporales mostrando cómo un pulso de fuerza en Y (Wrench Y) causa una desviación visible en la posición X (Current EE pose X)]*
+$\mathbf{\Lambda}(\mathbf{q}) = (\mathbf{J}(\mathbf{q})\mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T)^{-1}$
+
+Debido a la cinemática del robot, esta matriz
+
+$\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**
+
+Por tanto, una perturbación
+
+$\mathbf{f}_{ext}$ 
+
+puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
+
+RESULTADOS DE SIMULACIÓN:
+
+![alt text](EXP1.gif)
+![alt text](EXP1X.png)
+![alt text](EXP1Y.png)
 
 ---
+
 
 ### 4. Mitigación del fenómeno (Reto Opcional)
 
@@ -253,9 +264,8 @@ Si disponemos de la medida de la fuerza externa $\mathbf{f}_{ext}$, podemos intr
 
 $$\boldsymbol{\tau} = \mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}}_d + \mathbf{n}(\mathbf{q}, \dot{\mathbf{q}}) - \mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$$
 
-Al aplicar esta nueva ley de control, el término $-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ del controlador anula exactamente la perturbación física $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ sufrida por el robot. Como resultado directo, $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$, garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
-
-*[Espacio para captura de simulación: Gráficas del sistema corregido, donde una fuerza en el eje Y produce cero perturbación en la posición del eje X, confirmando el desacoplamiento]*
+Al aplicar esta nueva ley de control, el término 
+$-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ del controlador anula exactamente la perturbación física $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ sufrida por el robot. Como resultado directo, $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$, garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
 
 
 
@@ -286,9 +296,6 @@ $$\tilde{\mathbf{x}} = \mathbf{x} - \mathbf{x}_d \neq \mathbf{0}$$
 
 Este error "estira" el muelle virtual definido por la matriz $\mathbf{K}$. El término $-\mathbf{K}(\mathbf{x} - \mathbf{x}_d)$ actúa como una fuerza de atracción interna que obliga al efector final a acelerar hacia las nuevas coordenadas proporcionadas por la interfaz, intentando hacer que el error $\tilde{\mathbf{x}}$ vuelva a ser cero.
 
-*[Espacio para captura de simulación: Gráfica de la interfaz gráfica (sliders) junto a la ventana de RViz mostrando el "salto" del objetivo (ejes de coordenadas o marcador) hacia una nueva posición]*
-
----
 
 ### 2. Transitorio y Respuesta Dinámica
 
@@ -301,10 +308,20 @@ La forma exacta en la que el robot viaja desde su posición actual $\mathbf{x}$ 
   * **Sistema Sobreamortiguado (Alto $\mathbf{B}$):** El efecto viscoso dominará. El robot se acercará a $\mathbf{x}_d$ de manera lenta, asintótica y sin ninguna oscilación.
   * **Sistema Críticamente Amortiguado:** Es el balance ideal. El robot alcanza la nueva pose en el menor tiempo posible sin llegar a oscilar.
 
-*[Espacio para captura de simulación: Gráfica temporal (Timeseries) mostrando la curva de posición del efector final frente al tiempo al dar un salto en la referencia X o Y. Idealmente, capturas mostrando una respuesta subamortiguada (oscilatoria) y una sobreamortiguada (suave)]*
+
+
+RESULTADOS DE SIMULACIÓN:
+
+![alt text](EXP1.gif)
+![alt text](EXP1X.png)
+![alt text](EXP1Y.png)
 
 ---
 
+
+
 ### 3. Conclusión del Experimento
 
-El experimento demuestra que el control de impedancia no solo sirve para regular la interacción física con fuerzas externas (Experimento 1), sino que también actúa como un generador de trayectorias implícito. El robot actúa como si estuviera atado por gomas elásticas al punto $\mathbf{x}_d$; al mover dicho punto, arrastramos al robot con una dinámica que nosotros mismos hemos esculpido mediante las matrices $\mathbf{M}$, $\mathbf{B}$ y $\mathbf{K}$.
+El experimento demuestra que el control de impedancia no solo sirve para regular la interacción física con fuerzas externas (Experimento 1), sino que también actúa como un generador de trayectorias implícito. El robot actúa como si estuviera atado por gomas elásticas al punto   $\mathbf{x}_d$  ; al mover dicho punto, arrastramos al robot con una dinámica que nosotros mismos hemos esculpido mediante las matrices  $\mathbf{M}$  ,  $\mathbf{B}$ y $\mathbf{K}$  .
+
+
