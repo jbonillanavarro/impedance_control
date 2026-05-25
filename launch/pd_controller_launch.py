@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     
     pd_controller_node = Node(
-        package='uma_arm_control',
+        package='impedance_control',
         executable='pd_controller_node',
         name='pd_controller_node',
         output='screen',
