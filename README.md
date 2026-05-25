@@ -233,19 +233,7 @@ $$\mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}} = \mathbf{M}_{rob}(\mathbf{q})\d
 
 $$\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d + \mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$$
 
-Proyectando esta relación al espacio operacional, la matriz de inercia cartesiana aparente del manipulador es:
-
-$\mathbf{\Lambda}(\mathbf{q}) = (\mathbf{J}(\mathbf{q})\mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T)^{-1}$
-
-Debido a la cinemática del robot, esta matriz
-
-$\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**
-
-Por tanto, una perturbación
-
-$\mathbf{f}_{ext}$ 
-
-puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
+Proyectando esta relación al espacio operacional, la matriz de inercia cartesiana aparente del manipulador es   $\mathbf{\Lambda}(\mathbf{q}) = (\mathbf{J}(\mathbf{q})\mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T)^{-1}$   Debido a la cinemática del robot, esta matriz   $\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**   Por tanto, una perturbación   $\mathbf{f}_{ext}$    puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
 
 RESULTADOS DE SIMULACIÓN
 
