@@ -323,9 +323,8 @@ La forma exacta en la que el robot viaja desde su posición actual $\mathbf{x}$ 
 
 RESULTADOS DE SIMULACIÓN:
 
-![alt text](EXP2.gif)
-![alt text](EXP2X.png)
-![alt text](EXP2Y.png)
+![alt text](EXP2_1.gif)
+![alt text](EXP2_graf.png)
 
 ---
 
