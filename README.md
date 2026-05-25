@@ -328,7 +328,10 @@ RESULTADOS DE SIMULACIÓN:
 
 ---
 
+LLevandolo a situaciones extremas:
+![alt text](EXP2_1.gif)
 
+---
 
 ### 3. Conclusión del Experimento
 
