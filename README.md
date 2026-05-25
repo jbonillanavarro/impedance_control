@@ -27,7 +27,9 @@ A continuación se detallan las cinco funciones modificadas en el archivo `imped
 **Formulación Matemática:**
 La cinemática directa para un manipulador planar 2R se define como:
 
-$$ \mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} l_1 \cos(q_1) + l_2 \cos(q_1 + q_2) \\ l_1 \sin(q_1) + l_2 \sin(q_1 + q_2) \end{bmatrix} $$
+$$
+\mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} l_1 \cos(q_1) + l_2 \cos(q_1 + q_2) \\ l_1 \sin(q_1) + l_2 \sin(q_1 + q_2) \end{bmatrix}
+$$
 
 **Implementación en C++:**
 Se extraen las variables articulares $q_1$ y $q_2$ del vector `joint_positions_` y se aplican las ecuaciones trigonométricas utilizando las longitudes de los eslabones $l_1$ (`l1_`) y $l_2$ (`l2_`).
