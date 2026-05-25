@@ -264,19 +264,24 @@
             RCLCPP_INFO(this->get_logger(), "Jacobian determinant: %.6f", det);
         }
 
+        // Method to calculate Cartesian velocity with the first-order differential kinematics
+        Eigen::MatrixXd differential_kinematics()
+        {
+            Eigen::VectorXd x_dot = jacobian_ * joint_velocities_;
+            return x_dot;
+        }
+
         // Method to compute the impedance controller
         Eigen::VectorXd impedance_controller()
         {
-            // Placeholder for impedance controller calculation
-            Eigen::VectorXd x_dot_d = Eigen::VectorXd::Zero(2); // We assume desired cartesian velocity = 0
+            Eigen::VectorXd x_dot_d = Eigen::VectorXd::Zero(2); // Se asume velocidad cartesiana deseada = 0
 
-            // Calculate Cartesian errors
-            Eigen::VectorXd x_error << 0,0;
-            Eigen::VectorXd x_dot_error << 0,0;
+            // Calculamos los errores cartesianos
+            Eigen::VectorXd x_error = cartesian_pose_ - equilibrium_pose_;
+            Eigen::VectorXd x_dot_error = cartesian_velocities_ - x_dot_d;
 
-            // Replace with actual impedance controller equation: x'' = M^(-1)[F_ext - k x_error - B x'_error]
-            Eigen::VectorXd x_ddot(2);
-            x_ddot << 0,0;
+            // Ecuación del modelo de impedancia de segundo orden: x'' = M^(-1)[F_ext - K*x_error - B*x_dot_error]
+            Eigen::VectorXd x_ddot = mass_matrix_.inverse() * (external_wrenches_ - stiffness_matrix_ * x_error - damping_matrix_ * x_dot_error);
 
             return x_ddot;
         }
@@ -288,12 +293,13 @@
             // q'' = J(q)^(-1)[x'' - J'(q,q')q']
 
             RCLCPP_INFO(this->get_logger(), "x_ddot: [%.3f, %.3f]",
-                        desired_cartesian_accelerations_(0), desired_cartesian_accelerations_(1));
+            desired_cartesian_accelerations_(0), desired_cartesian_accelerations_(1));
 
-            q_ddot << 0,0;
+            // q'' = J(q)^(-1)[x'' - J'(q,q')q']
+            Eigen::VectorXd q_ddot = jacobian_.inverse() * (desired_cartesian_accelerations_ - jacobian_derivative_ * joint_velocities_);
 
             return q_ddot;
-        }
+            }
 
         // Method to publish the joint data
         void publish_data()
