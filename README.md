@@ -247,6 +247,13 @@ $\mathbf{f}_{ext}$
 
 puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
 
+RESULTADOS DE SIMULACIÓN:
+
+![alt text](EXP1.gif)
+![alt text](EXP1X.png)
+![alt text](EXP1Y.png)
+
+---
 
 
 ### 4. Mitigación del fenómeno (Reto Opcional)
@@ -260,13 +267,7 @@ $$\boldsymbol{\tau} = \mathbf{M}_{rob}(\mathbf{q})\ddot{\mathbf{q}}_d + \mathbf{
 Al aplicar esta nueva ley de control, el término 
 $-\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ del controlador anula exactamente la perturbación física $+\mathbf{J}(\mathbf{q})^T \mathbf{f}_{ext}$ sufrida por el robot. Como resultado directo, $\ddot{\mathbf{q}} = \ddot{\mathbf{q}}_d$, garantizando que el robot físico siga de manera perfecta las trayectorias cartesianas desacopladas que emanan del controlador de impedancia, sin importar la dirección de la fuerza aplicada.
 
-RESULTADOS DE SIMULACIÓN:
 
-![alt text](EXP1.gif)
-![alt text](EXP1X.png)
-![alt text](EXP1Y.png)
-
----
 
 ## Experimento 2: Cambio de la pose de equilibrio
 
@@ -295,9 +296,6 @@ $$\tilde{\mathbf{x}} = \mathbf{x} - \mathbf{x}_d \neq \mathbf{0}$$
 
 Este error "estira" el muelle virtual definido por la matriz $\mathbf{K}$. El término $-\mathbf{K}(\mathbf{x} - \mathbf{x}_d)$ actúa como una fuerza de atracción interna que obliga al efector final a acelerar hacia las nuevas coordenadas proporcionadas por la interfaz, intentando hacer que el error $\tilde{\mathbf{x}}$ vuelva a ser cero.
 
-*[Espacio para captura de simulación: Gráfica de la interfaz gráfica (sliders) junto a la ventana de RViz mostrando el "salto" del objetivo (ejes de coordenadas o marcador) hacia una nueva posición]*
-
----
 
 ### 2. Transitorio y Respuesta Dinámica
 
@@ -310,10 +308,20 @@ La forma exacta en la que el robot viaja desde su posición actual $\mathbf{x}$ 
   * **Sistema Sobreamortiguado (Alto $\mathbf{B}$):** El efecto viscoso dominará. El robot se acercará a $\mathbf{x}_d$ de manera lenta, asintótica y sin ninguna oscilación.
   * **Sistema Críticamente Amortiguado:** Es el balance ideal. El robot alcanza la nueva pose en el menor tiempo posible sin llegar a oscilar.
 
-*[Espacio para captura de simulación: Gráfica temporal (Timeseries) mostrando la curva de posición del efector final frente al tiempo al dar un salto en la referencia X o Y. Idealmente, capturas mostrando una respuesta subamortiguada (oscilatoria) y una sobreamortiguada (suave)]*
+
+
+RESULTADOS DE SIMULACIÓN:
+
+![alt text](EXP1.gif)
+![alt text](EXP1X.png)
+![alt text](EXP1Y.png)
 
 ---
 
+
+
 ### 3. Conclusión del Experimento
 
-El experimento demuestra que el control de impedancia no solo sirve para regular la interacción física con fuerzas externas (Experimento 1), sino que también actúa como un generador de trayectorias implícito. El robot actúa como si estuviera atado por gomas elásticas al punto $\mathbf{x}_d$; al mover dicho punto, arrastramos al robot con una dinámica que nosotros mismos hemos esculpido mediante las matrices $\mathbf{M}$, $\mathbf{B}$ y $\mathbf{K}$.
+El experimento demuestra que el control de impedancia no solo sirve para regular la interacción física con fuerzas externas (Experimento 1), sino que también actúa como un generador de trayectorias implícito. El robot actúa como si estuviera atado por gomas elásticas al punto   $\mathbf{x}_d$  ; al mover dicho punto, arrastramos al robot con una dinámica que nosotros mismos hemos esculpido mediante las matrices  $\mathbf{M}$  ,  $\mathbf{B}$ y $\mathbf{K}$  .
+
+
