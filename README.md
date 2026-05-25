@@ -247,7 +247,9 @@ $\mathbf{f}_{ext}$
 
 puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
 
-RESULTADOS DE SIMULACIÓN:
+RESULTADOS DE SIMULACIÓN
+
+Con valores predeterminados:
 
 ![alt text](EXP1.gif)
 ![alt text](EXP1X.png)
@@ -255,6 +257,7 @@ RESULTADOS DE SIMULACIÓN:
 
 ---
 
+Con valores de alta impedancia en X y baja en Y:
 
 ### 4. Mitigación del fenómeno (Reto Opcional)
 
