@@ -251,6 +251,13 @@ Con valores predeterminados:
 
 Con valores de alta impedancia en X y baja en Y:
 
+![alt text](EXP1_1.gif)
+![alt text](EXP1_1X.png)
+![alt text](EXP1_1Y.png)
+
+
+
+
 ### 4. Mitigación del fenómeno (Reto Opcional)
 
 Para eliminar este acoplamiento indeseado y conseguir que el manipulador se comporte exactamente como dicta nuestro modelo de impedancia ideal, es necesario compensar la fuerza externa a nivel de par articular (en el nodo `dynamics_cancellation`).
