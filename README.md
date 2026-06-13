@@ -1,4 +1,4 @@
-# Impedance Control
+# LAB 4: Impedance Control
 Este es el repositorio de Lab Session 4: Impedance Control.
 
 ## Ejecución 
