@@ -210,7 +210,7 @@ Modificar los parámetros en el archivo `impedance_params.yaml` altera directame
 
 Configurar una alta impedancia en un eje y baja en otro implica establecer matrices (especialmente la de rigidez $\mathbf{K}$) con valores muy dispares en su diagonal principal. Por ejemplo:
 
-$$\mathbf{K}=\begin{bmatrix}K_{\text{alto}}&0\\0&K_{\text{bajo}}\end{bmatrix}$$
+$$\mathbf{K}=\begin{bmatrix}K_{\mathrm{alto}} & 0 \\ 0 & K_{\mathrm{bajo}}\end{bmatrix}$$
 
 * **Eje X (Alta impedancia):** El robot se resistirá fuertemente a cualquier desplazamiento en la dirección X. Se comportará como una superficie dura.
 * **Eje Y (Baja impedancia):** El robot cederá fácilmente ante cualquier fuerza aplicada en la dirección Y. Se comportará de forma dócil y se dejará arrastrar con facilidad.
