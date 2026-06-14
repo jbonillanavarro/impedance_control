@@ -140,7 +140,7 @@ Despejando la aceleración deseada $\ddot{\mathbf{x}}_d$:
 $$ \ddot{\mathbf{x}}_d = \mathbf{M}^{-1}(\mathbf{f}_{ext} - \mathbf{B}\dot{\tilde{\mathbf{x}}} - \mathbf{K}\tilde{\mathbf{x}}) $$
 
 **Implementación en C++:**
-Se asume una velocidad de equilibrio nula ($\dot{\mathbf{x}}_d = \mathbf{0}$). Se calculan los errores y se despeja la aceleración invirtiendo la matriz de masa cartesianas (`mass_matrix_.inverse()`).
+Se asume una velocidad de equilibrio nula ($\dot{\mathbf{x}}_d = \mathbf{0}$). Se calculan los errores y se despeja la aceleración invirtiendo la matriz de masa cartesiana (`mass_matrix_.inverse()`).
 
 ```cpp
     Eigen::VectorXd impedance_controller()
@@ -210,7 +210,7 @@ Modificar los parámetros en el archivo `impedance_params.yaml` altera directame
 
 Configurar una alta impedancia en un eje y baja en otro implica establecer matrices (especialmente la de rigidez $\mathbf{K}$) con valores muy dispares en su diagonal principal. Por ejemplo:
 
-$$\mathbf{K} = \begin{bmatrix} K_{alto} & 0 \\ 0 & K_{bajo} \end{bmatrix}$$
+$$\mathbf{K}=\begin{bmatrix}K_{\text{alto}}&0\\0&K_{\text{bajo}}\end{bmatrix}$$
 
 * **Eje X (Alta impedancia):** El robot se resistirá fuertemente a cualquier desplazamiento en la dirección X. Se comportará como una superficie dura.
 * **Eje Y (Baja impedancia):** El robot cederá fácilmente ante cualquier fuerza aplicada en la dirección Y. Se comportará de forma dócil y se dejará arrastrar con facilidad.
@@ -239,7 +239,7 @@ Proyectando esta relación al espacio operacional, la matriz de inercia cartesia
 
 $\mathbf{\Lambda}(\mathbf{q}) = (\mathbf{J}(\mathbf{q})\mathbf{M}_{rob}(\mathbf{q})^{-1}\mathbf{J}(\mathbf{q})^T)^{-1}$   
 
-Debido a la cinemática del robot, esta matriz     $\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**     Por tanto, una perturbación         $\mathbf{f}_{ext}$       puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
+Debido a la cinemática del robot, esta matriz     $\mathbf{\Lambda}(\mathbf{q})$ **no es diagonal**.     Por tanto, una perturbación         $\mathbf{f}_{ext}$       puramente en X se acopla a través de la inercia real del mecanismo, produciendo aceleraciones físicas que desplazan también el eje Y antes de que el lazo de control pueda compensarlo por completo.
 
 RESULTADOS DE SIMULACIÓN
 
@@ -330,7 +330,7 @@ RESULTADOS DE SIMULACIÓN:
 
 ---
 
-LLevandolo a situaciones extremas:
+LLevándolo a situaciones extremas:
 ![alt text](EXP2_1.gif)
 
 ---
